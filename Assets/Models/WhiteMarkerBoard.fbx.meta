@@ -1,0 +1,167 @@
+fileFormatVersion: 2
+guid: 65a702a2c5dd3c24ba9eee880df8f01a
+timeCreated: 1491121773
+licenseType: Free
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: base
+    100002: base_bordo.001
+    100004: base_bordo_chiodo
+    100006: base_bordo_chiodo.001
+    100008: cancellino
+    100010: cancellino_tela
+    100012: Cube
+    100014: Cube.001
+    100016: Cube.002
+    100018: Cube.003
+    100020: Cube.004
+    100022: Cylinder
+    100024: Cylinder.001
+    100026: Cylinder.002
+    100028: Cylinder.003
+    100030: Pennarello_blu
+    100032: Pennarello_rosso
+    100034: reggipenne
+    100036: //RootNode
+    400000: base
+    400002: base_bordo.001
+    400004: base_bordo_chiodo
+    400006: base_bordo_chiodo.001
+    400008: cancellino
+    400010: cancellino_tela
+    400012: Cube
+    400014: Cube.001
+    400016: Cube.002
+    400018: Cube.003
+    400020: Cube.004
+    400022: Cylinder
+    400024: Cylinder.001
+    400026: Cylinder.002
+    400028: Cylinder.003
+    400030: Pennarello_blu
+    400032: Pennarello_rosso
+    400034: reggipenne
+    400036: //RootNode
+    2300000: base
+    2300002: base_bordo.001
+    2300004: base_bordo_chiodo
+    2300006: base_bordo_chiodo.001
+    2300008: cancellino
+    2300010: cancellino_tela
+    2300012: Cube
+    2300014: Cube.001
+    2300016: Cube.002
+    2300018: Cube.003
+    2300020: Cube.004
+    2300022: Cylinder
+    2300024: Cylinder.001
+    2300026: Cylinder.002
+    2300028: Cylinder.003
+    2300030: Pennarello_blu
+    2300032: Pennarello_rosso
+    2300034: reggipenne
+    3300000: base
+    3300002: base_bordo.001
+    3300004: base_bordo_chiodo
+    3300006: base_bordo_chiodo.001
+    3300008: cancellino
+    3300010: cancellino_tela
+    3300012: Cube
+    3300014: Cube.001
+    3300016: Cube.002
+    3300018: Cube.003
+    3300020: Cube.004
+    3300022: Cylinder
+    3300024: Cylinder.001
+    3300026: Cylinder.002
+    3300028: Cylinder.003
+    3300030: Pennarello_blu
+    3300032: Pennarello_rosso
+    3300034: reggipenne
+    4300000: Cube.004
+    4300002: Cube.003
+    4300004: Cube.002
+    4300006: Cube.001
+    4300008: base_bordo.001
+    4300010: Cylinder.003
+    4300012: Cylinder.002
+    4300014: Cylinder.001
+    4300016: Cylinder
+    4300018: Cube
+    4300020: base_bordo_chiodo.001
+    4300022: base_bordo_chiodo
+    4300024: cancellino
+    4300026: cancellino_tela
+    4300028: Pennarello_blu
+    4300030: Pennarello_rosso
+    4300032: base
+    4300034: reggipenne
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

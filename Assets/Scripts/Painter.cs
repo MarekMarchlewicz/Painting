@@ -47,11 +47,15 @@ public class Painter : MonoBehaviour
             {
                 if (lastDrawPosition.HasValue && lastDrawPosition.Value != hit.textureCoord)
                 {
+                    Debug.Log("Draw Line: " + Time.time.ToString());
+                    paintReceiver.CreateSplash(hit.textureCoord, stamp, color, currentAngle);
                     paintReceiver.DrawLine(stamp, lastDrawPosition.Value, hit.textureCoord, lastAngle, currentAngle, color, spacing);
                 }
                 else
                 {
                     paintReceiver.CreateSplash(hit.textureCoord, stamp, color, currentAngle);
+
+                    Debug.Log("Draw Splash: " + Time.time.ToString());
                 }
 
                 lastAngle = currentAngle;

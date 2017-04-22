@@ -35,6 +35,9 @@ public class PaintReceiver : MonoBehaviour
         stamp.SetRotation(stampRotation);
 
 		PaintOver (stamp, (Color32)color, uvPosition);
+
+        newTexture.SetPixels32(currentTexture);
+        newTexture.Apply();
     }
 
     public void DrawLine(Stamp stamp, Vector2 startUVPosition, Vector2 endUVPosition, float startStampRotation, float endStampRotation, Color color, float spacing)

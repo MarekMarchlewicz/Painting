@@ -2,6 +2,8 @@
 
 public class Painter : MonoBehaviour
 {
+    [SerializeField] private PaintMode paintMode;
+
     [SerializeField] private Transform paintingTransform;
 
     [SerializeField] private Texture2D brush;
@@ -24,8 +26,7 @@ public class Painter : MonoBehaviour
     private void Awake()
     {
         stamp = new Stamp(brush);
-
-        paintReceiver.SetStamp(stamp);
+        stamp.mode = paintMode;
 
         ChangeColour(color);
 
@@ -46,7 +47,7 @@ public class Painter : MonoBehaviour
             {
                 if (lastDrawPosition.HasValue && lastDrawPosition.Value != hit.textureCoord)
                 {
-                    paintReceiver.DrawLine(lastDrawPosition.Value, hit.textureCoord, angle, ++angle, color, spacing);
+                    paintReceiver.DrawLine(stamp, lastDrawPosition.Value, hit.textureCoord, angle, ++angle, color, spacing);
                 }
                 else
                 {

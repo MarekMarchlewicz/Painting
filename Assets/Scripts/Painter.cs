@@ -4,20 +4,20 @@ public class Painter : MonoBehaviour
 {
     [SerializeField] private PaintMode paintMode;
 
+    [SerializeField] private PaintReceiver paintReceiver;
+
     [SerializeField] private Transform paintingTransform;
 
     [SerializeField] private Texture2D brush;
-
-    [SerializeField] private PaintReceiver paintReceiver;
 
     [SerializeField] private Color color;
 
     [SerializeField] private MeshRenderer[] colouredParts;
 
     [SerializeField] private float spacing = 1f;
-
-    [SerializeField]
-    private float angle = 0;
+    
+    private float currentAngle = 0f;
+    private float lastAngle = 0f;
 
     private Stamp stamp;
 
@@ -38,7 +38,7 @@ public class Painter : MonoBehaviour
 
     private void OnTriggerStay(Collider otherCollider)
     {
-        if (otherCollider == paintReceiver.GetComponent<Collider>())
+        if (otherCollider.GetComponent<PaintReceiver>() != null)
         {
             Ray ray = new Ray(paintingTransform.position - paintingTransform.forward, paintingTransform.forward);
             RaycastHit hit;
@@ -47,12 +47,14 @@ public class Painter : MonoBehaviour
             {
                 if (lastDrawPosition.HasValue && lastDrawPosition.Value != hit.textureCoord)
                 {
-                    paintReceiver.DrawLine(stamp, lastDrawPosition.Value, hit.textureCoord, angle, ++angle, color, spacing);
+                    paintReceiver.DrawLine(stamp, lastDrawPosition.Value, hit.textureCoord, lastAngle, currentAngle, color, spacing);
                 }
                 else
                 {
-                    paintReceiver.CreateSplash(hit.textureCoord, stamp, color, angle);
+                    paintReceiver.CreateSplash(hit.textureCoord, stamp, color, currentAngle);
                 }
+
+                lastAngle = currentAngle;
 
                 lastDrawPosition = hit.textureCoord;
             }
@@ -71,5 +73,10 @@ public class Painter : MonoBehaviour
         {
             renderer.material.color = color;
         }
+    }
+
+    public void SetRotation(float newAngle)
+    {
+        currentAngle = newAngle;
     }
 }

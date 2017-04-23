@@ -12,6 +12,8 @@ public class PaintReceiver : MonoBehaviour
 	private int textureWidth;
 	private int textureHeight;
 
+    private bool wasModified = false;
+
     private void Awake()
     {
         texture = GetComponent<MeshRenderer>().material.mainTexture as Texture2D;
@@ -30,6 +32,18 @@ public class PaintReceiver : MonoBehaviour
         GetComponent<MeshRenderer>().material.mainTexture = newTexture;
     }
 
+    // Apply changes only once per frame when all the pixels are drawn into the currentTexture
+    private void LateUpdate()
+    {
+        if(wasModified)
+        {
+            newTexture.SetPixels32(currentTexture);
+            newTexture.Apply();
+
+            wasModified = false;
+        }
+    }
+
     /// <summary>
     /// Paints one stamp
     /// </summary>
@@ -42,9 +56,6 @@ public class PaintReceiver : MonoBehaviour
         stamp.SetRotation(stampRotation);
 
 		PaintOver (stamp, (Color32)color, uvPosition);
-
-        newTexture.SetPixels32(currentTexture);
-        newTexture.Apply();
     }
 
     /// <summary>
@@ -76,9 +87,6 @@ public class PaintReceiver : MonoBehaviour
 
             PaintOver(stamp, color, uvPosition);
         }
-
-        newTexture.SetPixels32(currentTexture);
-        newTexture.Apply();
     }
 
     private void PaintOver(Stamp stamp, Color32 color, Vector2 uvPosition)
@@ -133,5 +141,7 @@ public class PaintReceiver : MonoBehaviour
                 currentTexture[texturePosition] = newColor;
             }
         }
+
+        wasModified = true;
     }
 }

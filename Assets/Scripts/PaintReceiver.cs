@@ -115,8 +115,9 @@ public class PaintReceiver : MonoBehaviour
 
 		Color32 newColor;
         Color32 textureColor;
-        int alpha;
-
+        float alpha;
+        int aChannel;
+        
         for (int x = 0; x < totalWidth; x++)
         {
             for(int y = 0; y < totalHeight; y++)
@@ -124,19 +125,25 @@ public class PaintReceiver : MonoBehaviour
                 int stampX = paintStartPositionXClamped - paintStartPositionX + x;
                 int stampY = paintStartPositionYClamped - paintStartPositionY + y;
 
-				int texturePosition = paintStartPositionXClamped + x + (paintStartPositionYClamped + y) * textureWidth;
+                alpha = stamp.CurrentPixels[stampX + stampY * stamp.Width];
+
+                // There is no need to do further calculations if this stamp pixel is transparent
+                if (alpha < 0.001f)
+                    continue;
+
+                int texturePosition = paintStartPositionXClamped + x + (paintStartPositionYClamped + y) * textureWidth;
 
                 if (stamp.mode == PaintMode.Erase)
                     color = originalTexture[texturePosition];
 
-                alpha = (int)(stamp.CurrentPixels[stampX + stampY * stamp.Width] * 255f);
+                aChannel = (int)(alpha * 255f);
 
 				textureColor = currentTexture[texturePosition];
 
-                newColor.r = (byte)(color.r * alpha / 255 + textureColor.r * textureColor.a * (255 - alpha) / (255 * 255));
-                newColor.g = (byte)(color.g * alpha / 255 + textureColor.g * textureColor.a * (255 - alpha) / (255 * 255));
-                newColor.b = (byte)(color.b * alpha / 255 + textureColor.b * textureColor.a * (255 - alpha) / (255 * 255));
-                newColor.a = (byte)(alpha + textureColor.a * (255 - alpha) / 255);
+                newColor.r = (byte)(color.r * aChannel / 255 + textureColor.r * textureColor.a * (255 - aChannel) / (255 * 255));
+                newColor.g = (byte)(color.g * aChannel / 255 + textureColor.g * textureColor.a * (255 - aChannel) / (255 * 255));
+                newColor.b = (byte)(color.b * aChannel / 255 + textureColor.b * textureColor.a * (255 - aChannel) / (255 * 255));
+                newColor.a = (byte)(aChannel + textureColor.a * (255 - aChannel) / 255);
 
                 currentTexture[texturePosition] = newColor;
             }

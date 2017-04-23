@@ -29,7 +29,7 @@ public class Eraser : DraggableObject
 
     protected override void UpdateRotation(Quaternion targetRotation, float followingSpeed)
     {
-        if ((paintReceiver.transform.position - transform.position).magnitude < 1f)
+        if ((paintReceiver.transform.position - transform.position).z < 0.3f)
         {
             Vector3 eulerRotation = targetRotation.eulerAngles;
             eulerRotation.x = 0f;

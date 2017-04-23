@@ -30,6 +30,13 @@ public class PaintReceiver : MonoBehaviour
         GetComponent<MeshRenderer>().material.mainTexture = newTexture;
     }
 
+    /// <summary>
+    /// Paints one stamp
+    /// </summary>
+    /// <param name="uvPosition">Position to be painted</param>
+    /// <param name="stamp">Stamp instance</param>
+    /// <param name="color">Colour used to paint over - applied only if PaintMode of stamp is set to PaintOver</param>
+    /// <param name="stampRotation">Rotation of stamp</param>
     public void CreateSplash(Vector2 uvPosition, Stamp stamp, Color color, float stampRotation = 0f)
     {
         stamp.SetRotation(stampRotation);
@@ -40,31 +47,38 @@ public class PaintReceiver : MonoBehaviour
         newTexture.Apply();
     }
 
+    /// <summary>
+    /// Paints a line that consist of stamps
+    /// </summary>
+    /// <param name="stamp">Stamp instance</param>
+    /// <param name="startUVPosition">start UV position of the line</param>
+    /// <param name="endUVPosition">End UV position of the line</param>
+    /// <param name="startStampRotation">Rotation of stamp at the beginning</param>
+    /// <param name="endStampRotation">Rotation of stamp at the end</param>
+    /// <param name="color">Colour used to paint over - applied only if PaintMode of stamp is set to PaintOver</param>
+    /// <param name="spacing">The smaller the value, the more dense the line is</param>
     public void DrawLine(Stamp stamp, Vector2 startUVPosition, Vector2 endUVPosition, float startStampRotation, float endStampRotation, Color color, float spacing)
     {
         Vector2 uvDistance = endUVPosition - startUVPosition;
 
-        Vector2 pixelDistance = new Vector2(uvDistance.x * textureWidth, uvDistance.y * textureHeight);
+        Vector2 pixelDistance = new Vector2(Mathf.Abs(uvDistance.x) * textureWidth, Mathf.Abs(uvDistance.y) * textureHeight);
+        float stampDistance = stamp.Width > stamp.Height ? stamp.Height : stamp.Width;
 
-        int stampsNo = Mathf.RoundToInt(pixelDistance.magnitude / (new Vector2(stamp.Width, stamp.Height).magnitude / spacing));
+        int stampsNo = Mathf.FloorToInt((pixelDistance.magnitude / stampDistance) / spacing) + 1;
 
-        if (stampsNo > 0)
+        for (int i = 0; i <= stampsNo; i++)
         {
-            for (int i = 0; i <= stampsNo; i++)
-            {
-                float lerp = i / (float)stampsNo;
+            float lerp = i / (float)stampsNo;
 
-                Vector2 uvPosition = Vector2.Lerp(startUVPosition, endUVPosition, lerp);
+            Vector2 uvPosition = Vector2.Lerp(startUVPosition, endUVPosition, lerp);
+            
+            stamp.SetRotation(Mathf.Lerp(startStampRotation, endStampRotation, lerp));
 
-                if (endStampRotation != startStampRotation)
-                    stamp.SetRotation(Mathf.Lerp(startStampRotation, endStampRotation, lerp));
-
-                PaintOver(stamp, (Color32)color, uvPosition);
-            }
-
-            newTexture.SetPixels32(currentTexture);
-            newTexture.Apply();
+            PaintOver(stamp, color, uvPosition);
         }
+
+        newTexture.SetPixels32(currentTexture);
+        newTexture.Apply();
     }
 
     private void PaintOver(Stamp stamp, Color32 color, Vector2 uvPosition)
@@ -72,11 +86,21 @@ public class PaintReceiver : MonoBehaviour
         int paintStartPositionX = (int)((uvPosition.x * textureWidth) - stamp.Width / 2f);
 		int paintStartPositionY = (int)((uvPosition.y * textureHeight) - stamp.Height / 2f);
 
-		int paintStartPositionXClamped = Mathf.Clamp(paintStartPositionX, 0, textureWidth);
-        int paintStartPositionYClamped = Mathf.Clamp(paintStartPositionY, 0, textureHeight);
+        // Checking manually if int is bigger than 0 is faster than using Mathf.Clamp
+        int paintStartPositionXClamped = paintStartPositionX;
+        if (paintStartPositionXClamped < 0)
+            paintStartPositionXClamped = 0;
+        int paintStartPositionYClamped = paintStartPositionY;
+        if (paintStartPositionYClamped < 0)
+            paintStartPositionYClamped = 0;
 
-        int paintEndPositionXClamped = Mathf.Clamp(paintStartPositionX + stamp.Width, 0, textureWidth);
-        int paintEndPositionYClamped = Mathf.Clamp(paintStartPositionY + stamp.Height, 0, textureHeight);
+        // Check manually if end position doesn't exceed texture size
+        int paintEndPositionXClamped = paintStartPositionX + stamp.Width;
+        if (paintEndPositionXClamped >= textureWidth)
+            paintEndPositionXClamped = textureWidth - 1;
+        int paintEndPositionYClamped = paintStartPositionY + stamp.Height;
+        if (paintEndPositionYClamped >= textureHeight)
+            paintEndPositionYClamped = textureHeight - 1;
 
         int totalWidth = paintEndPositionXClamped - paintStartPositionXClamped;
         int totalHeight = paintEndPositionYClamped - paintStartPositionYClamped;

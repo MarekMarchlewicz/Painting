@@ -2,19 +2,26 @@
 
 public class Painter : MonoBehaviour
 {
-    [SerializeField] private PaintMode paintMode;
+    [SerializeField]
+    private PaintMode paintMode;
 
-    [SerializeField] private PaintReceiver paintReceiver;
+    [SerializeField]
+    private PaintReceiver paintReceiver;
 
-    [SerializeField] private Transform paintingTransform;
+    [SerializeField]
+    private Transform paintingTransform;
 
-    [SerializeField] private Texture2D brush;
+    [SerializeField]
+    private Texture2D brush;
 
-    [SerializeField] private Color color;
+    [SerializeField]
+    private Color color;
 
-    [SerializeField] private MeshRenderer[] colouredParts;
+    [SerializeField]
+    private MeshRenderer[] colouredParts;
 
-    [SerializeField] private float spacing = 1f;
+    [SerializeField]
+    private float spacing = 1f;
     
     private float currentAngle = 0f;
     private float lastAngle = 0f;
@@ -47,15 +54,11 @@ public class Painter : MonoBehaviour
             {
                 if (lastDrawPosition.HasValue && lastDrawPosition.Value != hit.textureCoord)
                 {
-                    Debug.Log("Draw Line: " + Time.time.ToString());
-                    paintReceiver.CreateSplash(hit.textureCoord, stamp, color, currentAngle);
                     paintReceiver.DrawLine(stamp, lastDrawPosition.Value, hit.textureCoord, lastAngle, currentAngle, color, spacing);
                 }
                 else
                 {
                     paintReceiver.CreateSplash(hit.textureCoord, stamp, color, currentAngle);
-
-                    Debug.Log("Draw Splash: " + Time.time.ToString());
                 }
 
                 lastAngle = currentAngle;

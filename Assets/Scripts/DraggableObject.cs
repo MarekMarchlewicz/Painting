@@ -14,10 +14,13 @@ public class DraggableObject : MonoBehaviour
 
     private const int MaxNumberOfPositions = 8;
     private Queue<Vector3> velocities = new Queue<Vector3>(MaxNumberOfPositions);
+    private Queue<Vector3> angularVelocities = new Queue<Vector3>(MaxNumberOfPositions);
 
     private Vector3 startPosition;
+    private Quaternion starRotation;
 
     private Vector3? lastPosition = null;
+    private Quaternion? lastRotation = null;
 
     private Transform controllerTransform = null;
 
@@ -34,26 +37,37 @@ public class DraggableObject : MonoBehaviour
         mRigidbody = GetComponent<Rigidbody>();
 
         startPosition = mRigidbody.position;
+        starRotation = mRigidbody.rotation;
     }
 
     private void FixedUpdate()
     {
         if (controllerTransform != null)
         {
-            if (lastPosition.HasValue)
+            if (lastPosition.HasValue && lastRotation.HasValue)
             {
                 UpdatePosition(controllerTransform.position, followingSpeed);
                 UpdateRotation(controllerTransform.rotation * Quaternion.Euler(Vector3.right * 90f), followingSpeed);
 
                 Vector3 velocity = (mRigidbody.position - lastPosition.Value) / Time.deltaTime;
 
-                velocities.Enqueue(velocity);
+                Vector3 deltaRotation = mRigidbody.rotation * (Quaternion.Inverse(lastRotation.Value)).eulerAngles;
+                deltaRotation.x = Mathf.DeltaAngle(0, deltaRotation.x);
+                deltaRotation.y = Mathf.DeltaAngle(0, deltaRotation.y);
+                deltaRotation.z = Mathf.DeltaAngle(0, deltaRotation.z);
+                Vector3 angularVelocity = deltaRotation / Time.deltaTime;
 
+                velocities.Enqueue(velocity);
                 if (velocities.Count > MaxNumberOfPositions)
                     velocities.Dequeue();
+
+                angularVelocities.Enqueue(angularVelocity);
+                if (angularVelocities.Count > MaxNumberOfPositions)
+                    angularVelocities.Dequeue();
             }
 
             lastPosition = mRigidbody.position;
+            lastRotation = mRigidbody.rotation;
         }
     }
 
@@ -94,8 +108,19 @@ public class DraggableObject : MonoBehaviour
         if (velocities.Count > 0)
             releaseVelocity /= velocities.Count;
 
+        Vector3 releaseAngularVelocity = Vector3.zero;
+
+        foreach (Vector3 angularVelocity in angularVelocities)
+        {
+            releaseAngularVelocity += angularVelocity;
+        }
+
+        if (angularVelocities.Count > 0)
+            releaseAngularVelocity /= angularVelocities.Count;
+
         mRigidbody.isKinematic = false;
         mRigidbody.velocity = releaseVelocity;
+        mRigidbody.angularVelocity = releaseAngularVelocity;
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -108,7 +133,9 @@ public class DraggableObject : MonoBehaviour
 
     private void ResetPosition()
     {
-        transform.position = startPosition;
+        mRigidbody.position = startPosition;
+        mRigidbody.rotation = starRotation;
+
         mRigidbody.velocity = Vector3.zero;
         mRigidbody.angularVelocity = Vector3.zero;
     }

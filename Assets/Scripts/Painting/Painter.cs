@@ -42,7 +42,7 @@ public class Painter : MonoBehaviour
 
     private void Update()
     {
-        currentAngle = transform.rotation.eulerAngles.z;
+        currentAngle = -transform.rotation.eulerAngles.z;
 
         Ray ray = new Ray(paintingTransform.position, paintingTransform.forward);
         RaycastHit hit;

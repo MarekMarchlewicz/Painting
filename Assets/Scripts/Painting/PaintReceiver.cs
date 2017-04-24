@@ -1,8 +1,13 @@
 ﻿using UnityEngine;
 
+using System.IO;
+
 [RequireComponent(typeof(MeshRenderer))]
 public class PaintReceiver : MonoBehaviour
 {
+    [SerializeField]
+    private Texture2D initialTexture;
+
     private Texture2D texture;
     private Texture2D newTexture;
 	private Color32[] originalTexture;
@@ -22,12 +27,13 @@ public class PaintReceiver : MonoBehaviour
         textureHeight = texture.height;
 
         originalTexture = texture.GetPixels32();
-        currentTexture = new Color32[textureWidth * textureHeight];
-        originalTexture.CopyTo(currentTexture, 0);
 
         newTexture = new Texture2D(textureWidth, textureHeight, TextureFormat.RGBA32, false, true);
-		newTexture.SetPixels32(originalTexture);
+		newTexture.SetPixels32(initialTexture.GetPixels32());
         newTexture.Apply();
+
+        currentTexture = new Color32[textureWidth * textureHeight];
+        newTexture.GetPixels32().CopyTo(currentTexture, 0);
 
         GetComponent<MeshRenderer>().material.mainTexture = newTexture;
     }

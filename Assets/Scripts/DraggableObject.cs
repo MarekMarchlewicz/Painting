@@ -20,7 +20,6 @@ public class DraggableObject : MonoBehaviour
     private Quaternion starRotation;
 
     private Vector3? lastPosition = null;
-    private Quaternion? lastRotation = null;
 
     private Transform controllerTransform = null;
 
@@ -44,22 +43,18 @@ public class DraggableObject : MonoBehaviour
     {
         if (controllerTransform != null)
         {
-            if (lastPosition.HasValue && lastRotation.HasValue)
+            if (lastPosition.HasValue)
             {
                 UpdatePosition(controllerTransform.position, followingSpeed);
                 UpdateRotation(controllerTransform.rotation * Quaternion.Euler(Vector3.right * 90f), followingSpeed);
 
                 Vector3 velocity = (mRigidbody.position - lastPosition.Value) / Time.deltaTime;
-
-                Vector3 deltaRotation = mRigidbody.rotation * (Quaternion.Inverse(lastRotation.Value)).eulerAngles;
-                deltaRotation.x = Mathf.DeltaAngle(0, deltaRotation.x);
-                deltaRotation.y = Mathf.DeltaAngle(0, deltaRotation.y);
-                deltaRotation.z = Mathf.DeltaAngle(0, deltaRotation.z);
-                Vector3 angularVelocity = deltaRotation / Time.deltaTime;
-
+                
                 velocities.Enqueue(velocity);
                 if (velocities.Count > MaxNumberOfPositions)
                     velocities.Dequeue();
+
+                Vector3 angularVelocity = SteamVR_Controller.Input((int)controllerTransform.GetComponent<SteamVR_TrackedObject>().index).angularVelocity;
 
                 angularVelocities.Enqueue(angularVelocity);
                 if (angularVelocities.Count > MaxNumberOfPositions)
@@ -67,7 +62,6 @@ public class DraggableObject : MonoBehaviour
             }
 
             lastPosition = mRigidbody.position;
-            lastRotation = mRigidbody.rotation;
         }
     }
 

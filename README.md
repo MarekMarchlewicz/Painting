@@ -1,5 +1,5 @@
 # Drawing in VR
-Drawing/Erasing on a whiteboard.
+Drawing/Erasing on a whiteboard inspired by Valve's The Lab.
 
 
 http://www.lurendium.com/drawing-vr/
